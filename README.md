@@ -5,7 +5,7 @@
 作为样例，一是为了体现SimplePetpetPlugin和PetpetPlugin可以是有较大差异的两个插件，二是为了让新手开发者更方便理解本项目代码，除了功能更少，还特意采用了如下不同的设计：
 
 - 以Command的方式提供服务，不需自己实现指令匹配
-- 通过[SingletonDocumentRepository工具](https://github.com/hundun000/mirai-fleet-framework/blob/main/framework-core/src/main/java/hundun/miraifleet/framework/core/helper/repository/SingletonDocumentRepository.java)读取（和写默认值）配置文件。而不是通过JavaAutoSaveConfig读取配置
+- 通过[SingletonDocumentRepository工具](https://github.com/hundun000/mirai-fleet-framework/blob/main/framework-helper/src/main/java/hundun/miraifleet/framework/helper/repository/SingletonDocumentRepository.java)读取（和写默认值）配置文件。而不是通过JavaAutoSaveConfig读取配置
 
 ## 功能说明
 

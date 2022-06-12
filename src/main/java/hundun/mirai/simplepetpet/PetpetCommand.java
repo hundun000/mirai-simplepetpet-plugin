@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
+import hundun.miraifleet.framework.helper.repository.SingletonDocumentRepository;
 import kotlin.Pair;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.CompositeCommand;
@@ -16,7 +16,7 @@ import net.mamoe.mirai.contact.User;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.utils.ExternalResource;
 import xmmt.dituon.share.BasePetService;
-import xmmt.dituon.share.ConfigDTO;
+import xmmt.dituon.share.BaseServiceConfig;
 import xmmt.dituon.share.ImageSynthesis;
 import xmmt.dituon.share.TextExtraData;
 
@@ -24,13 +24,18 @@ public class PetpetCommand extends CompositeCommand {
     
     private final BasePetService petService;
     private final JvmPlugin plugin;
-    private final SingletonDocumentRepository<ConfigDTO> repository;
+    private final SingletonDocumentRepository<BaseServiceConfig> repository;
     
     public PetpetCommand(JvmPlugin plugin) {
         super(plugin, "制图", new String[]{}, "我是PetpetCommand", plugin.getParentPermission(), CommandArgumentContext.EMPTY);
         this.plugin = plugin;
         this.petService = new BasePetService();
-        this.repository = new SingletonDocumentRepository<ConfigDTO>(plugin, plugin.resolveConfigFile("repository.json"), ConfigDTO.class);
+        this.repository = new SingletonDocumentRepository<BaseServiceConfig>(
+                plugin, 
+                plugin.resolveConfigFile("repository.json"), 
+                BaseServiceConfig.class,
+                () -> new BaseServiceConfig()
+                );
         initPetService(plugin);
     }
     
@@ -40,13 +45,9 @@ public class PetpetCommand extends CompositeCommand {
      */
     private void initPetService(JvmPlugin plugin) {
         
-        ConfigDTO config = repository.findSingleton();
-        if (config == null) {
-            config = new ConfigDTO();
-            repository.saveSingleton(config);
-        }
-        
-        petService.readConfig(config);
+        BaseServiceConfig config = repository.findSingleton();
+
+        petService.readBaseServiceConfig(config);
         
         File petDataFolder = plugin.getDataFolder();
         petService.readData(petDataFolder);
