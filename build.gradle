@@ -15,11 +15,6 @@ repositories {
     maven { url "https://maven.aliyun.com/repository/central"}
     maven { url 'https://jitpack.io' }
 }
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
 }
@@ -30,15 +25,12 @@ java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
 }
-mirai { jvmTarget = JavaVersion.VERSION_11}
-
-
-version = '-SNAPSHOT'
+mirai { 
+    jvmTarget = JavaVersion.VERSION_11 
+}
 
 dependencies {
-    
-    compileOnly 'org.projectlombok:lombok:1.18.4'
-    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+    implementation 'com.github.Dituon:petpet:e37257015a'
     
     testCompile "junit:junit:4.11"
 }
