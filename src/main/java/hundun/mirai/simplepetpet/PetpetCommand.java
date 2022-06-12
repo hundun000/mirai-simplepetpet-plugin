@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
+import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
 import kotlin.Pair;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.CompositeCommand;
@@ -23,20 +24,28 @@ public class PetpetCommand extends CompositeCommand {
     
     private final BasePetService petService;
     private final JvmPlugin plugin;
+    private final SingletonDocumentRepository<ConfigDTO> repository;
     
     public PetpetCommand(JvmPlugin plugin) {
         super(plugin, "制图", new String[]{}, "我是PetpetCommand", plugin.getParentPermission(), CommandArgumentContext.EMPTY);
         this.plugin = plugin;
         this.petService = new BasePetService();
+        this.repository = new SingletonDocumentRepository<ConfigDTO>(plugin, plugin.resolveConfigFile("repository.json"), ConfigDTO.class);
         initPetService(plugin);
     }
     
     /**
-     * - 构造固定的ConfigDTO。若开发者有余力，可改为使用 {@link net.mamoe.mirai.console.data.java.JavaAutoSavePluginConfig JavaAutoSavePluginConfig} 的方式。<br>
+     * - 使用SingletonDocumentRepository工具读取config。<br>
      * - 以相对于插件数据目录的方式读取petService所需data目录。
      */
     private void initPetService(JvmPlugin plugin) {
-        ConfigDTO config = new ConfigDTO();
+        
+        ConfigDTO config = repository.findSingleton();
+        if (config == null) {
+            config = new ConfigDTO();
+            repository.saveSingleton(config);
+        }
+        
         petService.readConfig(config);
         
         File petDataFolder = plugin.getDataFolder();
