@@ -1,7 +1,8 @@
 /config/
 /bots/
 /plugins/
-# allow /data/
+# ignore only part of /data/
+/data/hundun.mirai.simplepetpet/save/
 /plugin-libraries/
 /plugin-shared-libraries/
 /logs/
