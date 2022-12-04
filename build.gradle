@@ -30,8 +30,8 @@ mirai {
 }
 
 dependencies {
-    implementation 'com.github.Dituon:petpet:3.2'
-    implementation 'com.github.hundun000.mirai-fleet-framework:framework-helper:0.5.6'
+    implementation 'com.github.Dituon:petpet:5.1'
+    implementation 'com.github.hundun000.mirai-fleet-framework:framework-helper:0.8.0'
     
     testCompile "junit:junit:4.11"
 }

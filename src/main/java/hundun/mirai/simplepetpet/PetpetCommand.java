@@ -6,12 +6,18 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
 import hundun.miraifleet.framework.helper.repository.SingletonDocumentRepository;
 import kotlin.Pair;
+import moe.dituon.petpet.share.BasePetService;
+import moe.dituon.petpet.share.BaseServiceConfig;
+import moe.dituon.petpet.share.GifAvatarExtraDataProvider;
+import moe.dituon.petpet.share.ImageSynthesis;
+import moe.dituon.petpet.share.TextExtraData;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.CompositeCommand;
 import net.mamoe.mirai.console.command.ConsoleCommandSender;
@@ -20,11 +26,7 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import net.mamoe.mirai.contact.User;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.utils.ExternalResource;
-import xmmt.dituon.share.AvatarExtraData;
-import xmmt.dituon.share.BasePetService;
-import xmmt.dituon.share.BaseServiceConfig;
-import xmmt.dituon.share.ImageSynthesis;
-import xmmt.dituon.share.TextExtraData;
+
 
 public class PetpetCommand extends CompositeCommand {
     
@@ -59,7 +61,7 @@ public class PetpetCommand extends CompositeCommand {
         petService.readBaseServiceConfig(config);
         
         File petDataFolder = plugin.resolveDataFile("templates");
-        petService.readData(petDataFolder);
+        petService.readData(petDataFolder.listFiles());
     }
     
     private void initSelf() {
@@ -138,8 +140,8 @@ public class PetpetCommand extends CompositeCommand {
     }
     
     private void useTemplateAndSend(CommandSender sender, String petkey, User target, String... petReplaceArgs) {
-        BufferedImage fromAvatarImage = sender.getUser() != null ? ImageSynthesis.getAvatarImage(sender.getUser().getAvatarUrl()) : null;
-        BufferedImage toAvatarImage = ImageSynthesis.getAvatarImage(target.getAvatarUrl());
+        BufferedImage fromAvatarImage = sender.getUser() != null ? ImageSynthesis.getWebImage(sender.getUser().getAvatarUrl()) : null;
+        BufferedImage toAvatarImage = ImageSynthesis.getWebImage(target.getAvatarUrl());
         
         Pair<InputStream, String> resultPair = useTemplate(fromAvatarImage, toAvatarImage, petkey, petReplaceArgs);
         // 使用制图结果
@@ -166,8 +168,13 @@ public class PetpetCommand extends CompositeCommand {
     private Pair<InputStream, String> useTemplate(BufferedImage fromAvatarImage, BufferedImage toAvatarImage, String petkey, String... petReplaceArgs) {
         // 准备制图参数
         TextExtraData textExtraData = petReplaceArgs != null ? new TextExtraData("", "", "", Arrays.asList(petReplaceArgs)) : null;
-        AvatarExtraData avatarExtraData = new AvatarExtraData(fromAvatarImage, toAvatarImage, null, null);
-        // 制图
+        GifAvatarExtraDataProvider avatarExtraData = new GifAvatarExtraDataProvider(
+                () -> List.of(fromAvatarImage), 
+                () -> List.of(toAvatarImage), 
+                null, 
+                null,
+                null
+                );        // 制图
         Pair<InputStream, String> resultPair = petService.generateImage(petkey, avatarExtraData, textExtraData, null);
         return resultPair;
     }

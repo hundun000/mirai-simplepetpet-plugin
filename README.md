@@ -22,7 +22,7 @@
 ![image](docs/摸.png)  
 ![image](docs/kiss.png)
 
-模板位于`data\hundun.mirai.simplepetpet\templates`，其中每一个模板来自[同版本的Petpet项目](https://github.com/Dituon/petpet/tree/3.2)，可从那边复制补充到本项目。
+模板位于`data\hundun.mirai.simplepetpet\templates`，其中每一个模板来自[同版本的Petpet项目的](https://github.com/Dituon/petpet/tree/5.1/data/xmmt.dituon.petpet)（当前使用版本：5.1），可从那边复制补充到本项目。
 
 运行`PluginTest`后，即可使用`/制图 测试模板 ……`指令，例如：
 > /制图 测试模板 petpet 
